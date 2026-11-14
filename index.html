@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f3d2e">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Pelada da Quarta – Arena Feitoza</title>
+<style>
+:root{--bg:#0c1d17;--card:#14302a;--card2:#1b3c34;--line:#28493f;--tx:#eef5f1;--mut:#97b3a8;--acc:#3ddc84;--accd:#1f8a52;--a:#4fa3ff;--b:#ffb84d;--red:#ff6b6b;--yel:#ffd43b}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select{font:inherit;color:var(--tx);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%}
+header{position:sticky;top:0;z-index:5;background:linear-gradient(180deg,#0f3d2e 70%,rgba(12,29,23,.96));padding:calc(12px + env(safe-area-inset-top)) 14px 10px;border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:10px}
+.top h1{font-size:20px;margin:0;flex:1;letter-spacing:.2px}
+.badge{font-size:11px;padding:3px 8px;border-radius:99px;background:var(--card2);color:var(--mut);border:1px solid var(--line)}
+.chips{display:flex;gap:6px;margin-top:10px}
+.chip{flex:1;padding:7px 0;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--mut);font-size:13px}
+.chip.on{background:var(--acc);color:#06281a;border-color:var(--acc);font-weight:700}
+main{padding:12px 12px 20px;max-width:720px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.h2{font-size:15px;font-weight:700;margin:4px 2px 10px;display:flex;align-items:center;gap:8px}
+.h2 .sp{flex:1}
+.mut{color:var(--mut);font-size:13px}
+.row{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.pos{width:28px;text-align:center;font-weight:800;color:var(--mut)}
+.pos.g1{color:#ffd700}.pos.g2{color:#c9d3dc}.pos.g3{color:#d08a4a}
+.nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.nm small{display:block;font-weight:400;color:var(--mut);font-size:12px;margin-top:2px}
+.big{font-size:20px;font-weight:800;color:var(--acc);min-width:36px;text-align:right}
+.big small{display:block;font-size:10px;color:var(--mut);font-weight:600;letter-spacing:.5px}
+.btn{border:0;border-radius:12px;padding:11px 14px;background:var(--acc);color:#06281a;font-weight:700}
+.btn.sec{background:var(--card2);color:var(--tx);border:1px solid var(--line)}
+.btn.dang{background:transparent;color:var(--red);border:1px solid #5a2a2a}
+.btn.sm{padding:7px 10px;font-size:13px;border-radius:10px}
+.btn.full{width:100%}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;background:#0b1a15;border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:0;padding:8px 0 9px;color:var(--mut);font-size:10.5px;display:flex;flex-direction:column;align-items:center;gap:3px}
+nav button .i{font-size:19px;line-height:1}
+nav button.on{color:var(--acc);font-weight:700}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--card2);padding:7px 12px;font-weight:700;color:var(--mut);font-size:13px}
+.seg button.onA{background:var(--a);color:#04203d}.seg button.onB{background:var(--b);color:#3a2300}
+.tA{color:var(--a)}.tB{color:var(--b)}
+.mcard .sc{display:flex;align-items:center;justify-content:center;gap:14px;font-size:26px;font-weight:800;margin:6px 0 8px}
+.mcard .sc span.x{font-size:16px;color:var(--mut)}
+.teams{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px}
+.teams div{line-height:1.55}
+.empty{text-align:center;padding:30px 10px;color:var(--mut)}
+.empty .e{font-size:40px;margin-bottom:6px}
+.stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.stat3 .card{margin:0;text-align:center;padding:10px 6px}
+.stat3 b{display:block;font-size:22px;color:var(--acc)}
+.stat3 span{font-size:11px;color:var(--mut)}
+/* modal */
+#ov{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.6);display:none}
+#ov.on{display:flex;align-items:flex-end;justify-content:center}
+#md{background:var(--bg);width:100%;max-width:720px;max-height:94vh;border-radius:18px 18px 0 0;display:flex;flex-direction:column;border-top:1px solid var(--line)}
+#mdh{display:flex;align-items:center;gap:10px;padding:14px 14px 10px;border-bottom:1px solid var(--line)}
+#mdh b{flex:1;font-size:16px}
+#mdb{overflow:auto;padding:12px 14px;flex:1}
+#mdf{padding:10px 14px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--line);display:flex;gap:8px}
+#mdf .btn{flex:1}
+.x{background:none;border:0;font-size:22px;color:var(--mut);padding:0 4px}
+.lbl{font-size:12px;color:var(--mut);margin:12px 0 6px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.scoreIn{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center}
+.scoreIn input{text-align:center;font-size:24px;font-weight:800;padding:8px}
+.prow{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:9px 10px;margin-bottom:7px}
+.prow .l1{display:flex;align-items:center;gap:8px}
+.prow .l1 .nm{font-weight:600}
+.prow.inA{border-color:#2d5f93}.prow.inB{border-color:#8a6427}
+.ctr{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.cc{display:flex;align-items:center;background:var(--card2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.cc span{padding:0 6px;font-size:13px;min-width:44px;text-align:center}
+.cc button{border:0;background:none;width:30px;height:32px;font-size:17px;color:var(--mut)}
+.cc.on span{color:var(--acc);font-weight:800}
+.warn{background:#3a2f12;border:1px solid #6b5520;color:#ffe08a;border-radius:10px;padding:8px 10px;font-size:13px;margin-top:10px}
+#toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#e9f7ef;color:#0b2a1d;padding:10px 16px;border-radius:99px;font-size:14px;font-weight:600;z-index:30;display:none;max-width:90vw;text-align:center}
+textarea{width:100%;min-height:200px;background:var(--card2);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px;font:13px/1.4 ui-monospace,monospace}
+.tabs2{display:flex;gap:6px;margin-bottom:10px}
+.status{background:#3a2f12;border:1px solid #6b5520;color:#ffe08a;border-radius:12px;padding:10px 12px;font-size:13px;margin-bottom:10px}
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><h1>⚽ Pelada da Quarta<small style="display:block;font-size:12px;font-weight:600;color:var(--acc);letter-spacing:.5px">ARENA FEITOZA</small></h1><span class="badge" id="mode">carregando…</span></div>
+  <div class="chips" id="chips">
+    <button class="chip on" data-p="all">Tudo</button>
+    <button class="chip" data-p="year">Este ano</button>
+    <button class="chip" data-p="month">Este mês</button>
+  </div>
+</header>
+<main id="app"></main>
+<nav id="nav">
+  <button data-t="ranking" class="on"><span class="i">🏆</span>Vitórias</button>
+  <button data-t="gols"><span class="i">⚽</span>Gols</button>
+  <button data-t="goleiros"><span class="i">🧤</span>Goleiros</button>
+  <button data-t="presenca"><span class="i">📅</span>Presença</button>
+  <button data-t="jogos"><span class="i">📋</span>Jogos</button>
+  <button data-t="elenco"><span class="i">👥</span>Elenco</button>
+</nav>
+<div id="ov"><div id="md"><div id="mdh"><b id="mdt"></b><button class="x" id="mdx">✕</button></div><div id="mdb"></div><div id="mdf"></div></div></div>
+<div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let db=null,isOwner=false,players=[],matches=[],loaded={p:false,m:false},status='',tab='ranking',period='all',golsMode='g';
+
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function fmtDate(s){if(!s)return'';const[y,m,d]=s.split('-');return d+'/'+m+'/'+y}
+function inPeriod(m){if(period==='all')return true;const t=today(),d=m.date||'';return period==='year'?d.slice(0,4)===t.slice(0,4):d.slice(0,7)===t.slice(0,7)}
+const periodName=()=>({all:'geral',year:'este ano',month:'este mês'})[period];
+function pname(id){const p=players.find(x=>x.id===id);return p?p.name:'(removido)'}
+function toast(t){const el=$('#toast');el.textContent=t;el.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(()=>el.style.display='none',2600)}
+function sortedMatches(){return [...matches].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||(b.createdAt||0)-(a.createdAt||0))}
+
+function compute(){
+  const ms=matches.filter(inPeriod),S={},dates=new Set();
+  const get=id=>S[id]||(S[id]={id,j:0,v:0,e:0,d:0,g:0,a:0,y:0,r:0,gj:0,gs:0,cs:0,dates:new Set()});
+  for(const m of ms){
+    dates.add(m.date);
+    const sa=+m.scoreA||0,sb=+m.scoreB||0;
+    for(const [t,ids] of [['A',m.teamA||[]],['B',m.teamB||[]]]){
+      const my=t==='A'?sa:sb,op=t==='A'?sb:sa;
+      for(const id of ids){
+        const s=get(id);s.j++;s.dates.add(m.date);
+        if(my>op)s.v++;else if(my<op)s.d++;else s.e++;
+        const st=(m.stats||{})[id]||{};s.g+=+st.g||0;s.a+=+st.a||0;s.y+=+st.y||0;s.r+=+st.r||0;
+      }
+      const k=t==='A'?m.keeperA:m.keeperB;
+      if(k){const s=get(k);s.gj++;s.gs+=op;if(op===0)s.cs++}
+    }
+  }
+  return {list:Object.values(S),ms,totalDates:dates.size};
+}
+const aprov=s=>s.j?Math.round((3*s.v+s.e)/(3*s.j)*100):0;
+
+/* ---------- render ---------- */
+function render(){
+  $('#mode').textContent=matches.length+' jogos';
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));
+  document.querySelectorAll('#chips .chip').forEach(b=>b.classList.toggle('on',b.dataset.p===period));
+  $('#chips').style.display=(tab==='elenco')?'none':'flex';
+  let h=status?`<div class="status">${esc(status)}</div>`:'';
+  if(db&&(!loaded.p||!loaded.m)&&!status)h+=`<div class="empty"><div class="e">⏳</div>Carregando dados…</div>`;
+  else h+=({ranking:vRanking,gols:vGols,goleiros:vGoleiros,presenca:vPresenca,jogos:vJogos,elenco:vElenco})[tab]();
+  $('#app').innerHTML=h;
+}
+function emptyBox(t){return `<div class="card empty"><div class="e">🥅</div>${t}</div>`}
+function noData(){return emptyBox(matches.length?`Nenhuma partida no período (${periodName()}).`:(isOwner?'Nenhuma partida lançada ainda.<br>Cadastre o elenco e lance a primeira partida na aba <b>Jogos</b>.':'Nenhuma partida lançada ainda.'))}
+
+function vRanking(){
+  const {list,ms}=compute();if(!ms.length)return noData();
+  const r=list.filter(s=>s.j).sort((a,b)=>b.v-a.v||aprov(b)-aprov(a)||b.j-a.j||pname(a.id).localeCompare(pname(b.id)));
+  let h=`<div class="stat3"><div class="card"><b>${ms.length}</b><span>partidas</span></div><div class="card"><b>${ms.reduce((t,m)=>t+(+m.scoreA||0)+(+m.scoreB||0),0)}</b><span>gols</span></div><div class="card"><b>${r.length}</b><span>jogadores</span></div></div>`;
+  h+=`<div class="card"><div class="h2">🏆 Vitórias por jogador <span class="sp"></span><button class="btn sec sm" data-act="copy" data-k="ranking">📋 Copiar</button></div>`;
+  r.forEach((s,i)=>{h+=`<div class="row"><div class="pos ${i<3?'g'+(i+1):''}">${i+1}º</div><div class="nm">${esc(pname(s.id))}<small>${s.j} J · ${s.v} V · ${s.e} E · ${s.d} D · ${aprov(s)}% aprov.</small></div><div class="big">${s.v}<small>VIT</small></div></div>`});
+  return h+`</div>`;
+}
+function vGols(){
+  const {list,ms}=compute();if(!ms.length)return noData();
+  const modes={g:['⚽ Artilharia','g','GOLS'],a:['🅰️ Assistências','a','ASSIST'],ga:['🔥 Gols + Assist.','ga','G+A'],c:['🟨 Cartões','c','CART']};
+  const val=(s,k)=>k==='ga'?s.g+s.a:k==='c'?s.y+s.r:s[k];
+  const [tit,k,lab]=modes[golsMode];
+  const r=list.filter(s=>val(s,k)>0).sort((a,b)=>val(b,k)-val(a,k)||(k==='c'?b.r-a.r:a.j-b.j));
+  let h=`<div class="tabs2">${Object.entries(modes).map(([m,v])=>`<button class="chip ${m===golsMode?'on':''}" data-gm="${m}">${v[0].split(' ')[0]} ${v[2]}</button>`).join('')}</div>`;
+  h+=`<div class="card"><div class="h2">${tit}<span class="sp"></span><button class="btn sec sm" data-act="copy" data-k="gols">📋 Copiar</button></div>`;
+  if(!r.length)h+=`<div class="empty">Ninguém pontuou aqui no período.</div>`;
+  r.forEach((s,i)=>{const sub=k==='c'?`🟨 ${s.y} · 🟥 ${s.r} · ${s.j} jogos`:`${s.g} gols · ${s.a} assist. · ${s.j} jogos · média ${(val(s,k)/s.j).toFixed(2)}`;
+    h+=`<div class="row"><div class="pos ${i<3?'g'+(i+1):''}">${i+1}º</div><div class="nm">${esc(pname(s.id))}<small>${sub}</small></div><div class="big">${val(s,k)}<small>${lab}</small></div></div>`});
+  return h+`</div>`;
+}
+function vGoleiros(){
+  const {list,ms}=compute();if(!ms.length)return noData();
+  const r=list.filter(s=>s.gj).sort((a,b)=>(a.gs/a.gj)-(b.gs/b.gj)||b.gj-a.gj);
+  let h=`<div class="card"><div class="h2">🧤 Goleiros (menos vazado)<span class="sp"></span><button class="btn sec sm" data-act="copy" data-k="goleiros">📋 Copiar</button></div>`;
+  if(!r.length)h+=`<div class="empty">Nenhum goleiro marcado nas partidas do período.</div>`;
+  r.forEach((s,i)=>{h+=`<div class="row"><div class="pos ${i<3?'g'+(i+1):''}">${i+1}º</div><div class="nm">${esc(pname(s.id))}<small>${s.gj} jogos no gol · ${s.gs} sofridos · ${s.cs} sem sofrer gol</small></div><div class="big">${(s.gs/s.gj).toFixed(1)}<small>MÉDIA</small></div></div>`});
+  return h+`</div>`;
+}
+function vPresenca(){
+  const {list,ms,totalDates}=compute();if(!ms.length)return noData();
+  const r=list.filter(s=>s.j).sort((a,b)=>b.dates.size-a.dates.size||b.j-a.j);
+  let h=`<div class="card"><div class="h2">📅 Presença · ${totalDates} dia(s) de pelada<span class="sp"></span><button class="btn sec sm" data-act="copy" data-k="presenca">📋 Copiar</button></div>`;
+  r.forEach((s,i)=>{h+=`<div class="row"><div class="pos ${i<3?'g'+(i+1):''}">${i+1}º</div><div class="nm">${esc(pname(s.id))}<small>${s.j} partidas · ${Math.round(s.dates.size/totalDates*100)}% dos dias</small></div><div class="big">${s.dates.size}<small>DIAS</small></div></div>`});
+  return h+`</div>`;
+}
+function vJogos(){
+  const ms=sortedMatches().filter(inPeriod);
+  let h='';
+  if(isOwner)h+=`<div class="btns" style="margin-bottom:10px"><button class="btn full" data-act="newMatch">＋ Lançar partida</button></div>`;
+  if(!ms.length)return h+noData();
+  let lastDate=null;
+  for(const m of ms){
+    if(m.date!==lastDate){h+=`<div class="h2" style="margin-top:12px">📆 ${fmtDate(m.date)}</div>`;lastDate=m.date}
+    const st=m.stats||{};
+    const line=id=>{const s=st[id]||{};let x=esc(pname(id));if(id===m.keeperA||id===m.keeperB)x+=' 🧤';if(s.g)x+=' '+'⚽'.repeat(Math.min(s.g,5))+(s.g>5?'×'+s.g:'');if(s.a)x+=` 🅰️${s.a>1?s.a:''}`;if(s.y)x+=' '+'🟨'.repeat(s.y);if(s.r)x+=' 🟥';return x};
+    h+=`<div class="card mcard"><div class="sc"><span class="tA">A ${+m.scoreA||0}</span><span class="x">x</span><span class="tB">${+m.scoreB||0} B</span></div>
+    <div class="teams"><div><b class="tA">Time A</b><br>${(m.teamA||[]).map(line).join('<br>')}</div><div><b class="tB">Time B</b><br>${(m.teamB||[]).map(line).join('<br>')}</div></div>
+    ${isOwner?`<div class="btns" style="margin-top:10px;justify-content:flex-end"><button class="btn sec sm" data-act="editMatch" data-id="${m.id}">✏️ Editar</button><button class="btn dang sm" data-act="delMatch" data-id="${m.id}">🗑 Excluir</button></div>`:''}</div>`;
+  }
+  return h;
+}
+function vElenco(){
+  const cnt={};for(const m of matches)for(const id of [...(m.teamA||[]),...(m.teamB||[])])cnt[id]=(cnt[id]||0)+1;
+  const ps=[...players].sort((a,b)=>(b.active!==false)-(a.active!==false)||a.name.localeCompare(b.name));
+  let h='';
+  if(isOwner)h+=`<div class="card"><div class="h2">➕ Adicionar jogador</div><form id="addP" style="display:flex;gap:8px"><input id="newName" placeholder="Nome ou apelido" maxlength="40" autocomplete="off"><button class="btn" type="submit">Salvar</button></form></div>`;
+  h+=`<div class="card"><div class="h2">👥 Elenco (${players.filter(p=>p.active!==false).length} ativos)</div>`;
+  if(!ps.length)h+=`<div class="empty">Nenhum jogador cadastrado.</div>`;
+  for(const p of ps){
+    const off=p.active===false;
+    h+=`<div class="row" style="${off?'opacity:.55':''}"><div class="nm">${esc(p.name)}<small>${cnt[p.id]||0} partidas${off?' · inativo':''}</small></div>${isOwner?`<button class="btn sec sm" data-act="editP" data-id="${p.id}">✏️</button><button class="btn sec sm" data-act="togP" data-id="${p.id}">${off?'Ativar':'Inativar'}</button>`:''}</div>`;
+  }
+  const lb=store.meta&&store.meta.lastBackup;
+  h+=`</div><div class="card"><div class="h2">💾 Backup</div><p class="mut" style="margin:0 0 10px">Os dados ficam só neste celular. Faça backup de vez em quando e guarde o arquivo (Drive, WhatsApp, e-mail). Último backup: ${lb?new Date(lb).toLocaleDateString('pt-BR'):'nunca'}.</p><div class="btns"><button class="btn" data-act="export">⬇️ Salvar backup</button><label class="btn sec" style="display:inline-block">⬆️ Restaurar<input type="file" id="impFile" accept=".json,application/json" hidden></label></div>`;
+  return h+`</div>`;
+}
+
+/* ---------- copy text ---------- */
+function copyText(k){
+  const {list,ms,totalDates}=compute();
+  const head={ranking:'🏆 VITÓRIAS',gols:'⚽ '+({g:'ARTILHARIA',a:'ASSISTÊNCIAS',ga:'GOLS + ASSISTÊNCIAS',c:'CARTÕES'})[golsMode],goleiros:'🧤 GOLEIROS',presenca:'📅 PRESENÇA'}[k];
+  let t=`${head} – Pelada da Quarta · Arena Feitoza (${periodName()})\n${ms.length} partidas\n\n`;
+  const med=i=>i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º';
+  if(k==='ranking')list.filter(s=>s.j).sort((a,b)=>b.v-a.v||aprov(b)-aprov(a)||b.j-a.j).forEach((s,i)=>t+=`${med(i)} ${pname(s.id)} – ${s.v} vitórias (${s.j}J, ${aprov(s)}%)\n`);
+  if(k==='gols'){const val=s=>golsMode==='ga'?s.g+s.a:golsMode==='c'?s.y+s.r:s[golsMode];list.filter(s=>val(s)>0).sort((a,b)=>val(b)-val(a)).forEach((s,i)=>t+=`${med(i)} ${pname(s.id)} – ${golsMode==='c'?`🟨${s.y} 🟥${s.r}`:val(s)}\n`)}
+  if(k==='goleiros')list.filter(s=>s.gj).sort((a,b)=>(a.gs/a.gj)-(b.gs/b.gj)).forEach((s,i)=>t+=`${med(i)} ${pname(s.id)} – ${s.gs} sofridos em ${s.gj} jogos (média ${(s.gs/s.gj).toFixed(1)})\n`);
+  if(k==='presenca')list.filter(s=>s.j).sort((a,b)=>b.dates.size-a.dates.size).forEach((s,i)=>t+=`${med(i)} ${pname(s.id)} – ${s.dates.size}/${totalDates} dias\n`);
+  return t;
+}
+async function doCopy(k){
+  const t=copyText(k);
+  try{await navigator.clipboard.writeText(t);toast('Copiado! Cole no WhatsApp 📲')}
+  catch(e){openModal('Copiar texto',`<p class="mut">Segure no texto, selecione tudo e copie:</p><textarea readonly>${esc(t)}</textarea>`,[{l:'Fechar',sec:1}])}
+}
+
+/* ---------- modal ---------- */
+let mdButtons=[];
+function openModal(title,body,buttons){
+  $('#mdt').textContent=title;$('#mdb').innerHTML=body;mdButtons=buttons||[];
+  $('#mdf').innerHTML=mdButtons.map((b,i)=>`<button class="btn ${b.sec?'sec':''} ${b.dang?'dang':''}" data-mb="${i}">${b.l}</button>`).join('');
+  $('#mdf').style.display=mdButtons.length?'flex':'none';
+  $('#ov').classList.add('on');$('#mdb').scrollTop=0;
+}
+function closeModal(){$('#ov').classList.remove('on');form=null}
+$('#mdx').onclick=closeModal;
+$('#ov').addEventListener('click',e=>{if(e.target.id==='ov')closeModal()});
+$('#mdf').addEventListener('click',e=>{const b=e.target.closest('[data-mb]');if(!b)return;const fn=mdButtons[+b.dataset.mb].f;if(fn)fn();else closeModal()});
+function confirmBox(text,ok){return new Promise(res=>{openModal('Confirmar',`<p>${text}</p>`,[{l:'Cancelar',sec:1,f:()=>{closeModal();res(false)}},{l:ok,dang:1,f:()=>{closeModal();res(true)}}])})}
+
+/* ---------- writes ---------- */
+async function w(fn,okMsg){
+  try{await fn();if(okMsg)toast(okMsg);return true}
+  catch(e){
+    const c=e&&e.code;
+    if(c==='invalid_argument'&&!isOwner)toast('Somente o administrador pode alterar.');
+    else if(c==='quota_exceeded')toast('Limite de armazenamento atingido.');
+    else toast('Erro ao salvar: '+((e&&e.message)||c||'tente de novo'));
+    return false;
+  }
+}
+
+/* ---------- match form ---------- */
+let form=null;
+function newForm(m){
+  if(m){const team={};(m.teamA||[]).forEach(id=>team[id]='A');(m.teamB||[]).forEach(id=>team[id]='B');
+    return {id:m.id,createdAt:m.createdAt,date:m.date,scoreA:+m.scoreA||0,scoreB:+m.scoreB||0,team,keeperA:m.keeperA||'',keeperB:m.keeperB||'',stats:JSON.parse(JSON.stringify(m.stats||{}))}}
+  return {id:null,date:today(),scoreA:0,scoreB:0,team:{},keeperA:'',keeperB:'',stats:{}};
+}
+function openForm(m){form=newForm(m);openModal(m?'Editar partida':'Nova partida','',[{l:'Cancelar',sec:1},{l:'💾 Salvar partida',f:saveForm}]);renderForm()}
+function renderForm(){
+  const f=form,body=$('#mdb'),top=body.scrollTop;
+  const ids=Object.keys(f.team);
+  const shown=players.filter(p=>p.active!==false||f.team[p.id]).sort((a,b)=>a.name.localeCompare(b.name));
+  const A=shown.filter(p=>f.team[p.id]==='A'),B=shown.filter(p=>f.team[p.id]==='B');
+  const ctr=(id,k,ic)=>{const v=(f.stats[id]||{})[k]||0;return `<div class="cc ${v?'on':''}"><button data-act="dec" data-id="${id}" data-k="${k}">−</button><span>${ic} ${v}</span><button data-act="inc" data-id="${id}" data-k="${k}">＋</button></div>`};
+  const sumG=t=>shown.filter(p=>f.team[p.id]===t).reduce((s,p)=>s+((f.stats[p.id]||{}).g||0),0);
+  let h=`<div class="lbl">Data</div><input type="date" id="fDate" value="${esc(f.date)}">
+  <div class="lbl">Placar</div><div class="scoreIn"><div><div class="tA" style="text-align:center;font-weight:700;margin-bottom:4px">Time A</div><input type="number" inputmode="numeric" min="0" id="fSA" value="${f.scoreA}"></div><b class="mut">x</b><div><div class="tB" style="text-align:center;font-weight:700;margin-bottom:4px">Time B</div><input type="number" inputmode="numeric" min="0" id="fSB" value="${f.scoreB}"></div></div>
+  <div class="lbl">Goleiros</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+   <select id="fKA"><option value="">🧤 Goleiro A</option>${A.map(p=>`<option value="${p.id}" ${f.keeperA===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}</select>
+   <select id="fKB"><option value="">🧤 Goleiro B</option>${B.map(p=>`<option value="${p.id}" ${f.keeperB===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}</select></div>
+  <div class="lbl" style="display:flex;align-items:center">Jogadores · <span class="tA">&nbsp;A ${A.length}</span>&nbsp;/&nbsp;<span class="tB">B ${B.length}</span><span style="flex:1"></span>${!f.id&&matches.length?`<button class="btn sec sm" data-act="repeat" style="text-transform:none;letter-spacing:0">↺ Times do último jogo</button>`:''}</div>`;
+  if(!shown.length)h+=`<div class="warn">Cadastre os jogadores na aba Elenco primeiro.</div>`;
+  for(const p of shown){
+    const t=f.team[p.id];
+    h+=`<div class="prow ${t?'in'+t:''}"><div class="l1"><span class="nm">${esc(p.name)}${(f.keeperA===p.id||f.keeperB===p.id)?' 🧤':''}</span><div class="seg"><button data-act="team" data-id="${p.id}" data-t="A" class="${t==='A'?'onA':''}">A</button><button data-act="team" data-id="${p.id}" data-t="B" class="${t==='B'?'onB':''}">B</button></div></div>
+    ${t?`<div class="ctr">${ctr(p.id,'g','⚽')}${ctr(p.id,'a','🅰️')}${ctr(p.id,'y','🟨')}${ctr(p.id,'r','🟥')}</div>`:''}</div>`;
+  }
+  const ga=sumG('A'),gb=sumG('B');
+  if(ids.length&&(ga>f.scoreA||gb>f.scoreB))h+=`<div class="warn">⚠️ Gols individuais (A ${ga} / B ${gb}) passam do placar.</div>`;
+  body.innerHTML=h;body.scrollTop=top;
+  $('#fDate').oninput=e=>f.date=e.target.value;
+  $('#fSA').oninput=e=>f.scoreA=Math.max(0,parseInt(e.target.value)||0);
+  $('#fSB').oninput=e=>f.scoreB=Math.max(0,parseInt(e.target.value)||0);
+  $('#fSA').onchange=$('#fSB').onchange=()=>renderForm();
+  $('#fKA').onchange=e=>{f.keeperA=e.target.value;renderForm()};
+  $('#fKB').onchange=e=>{f.keeperB=e.target.value;renderForm()};
+}
+$('#mdb').addEventListener('click',e=>{
+  if(!form)return;const b=e.target.closest('[data-act]');if(!b)return;
+  const f=form,id=b.dataset.id,a=b.dataset.act;
+  if(a==='team'){const t=b.dataset.t;if(f.team[id]===t){delete f.team[id];delete f.stats[id]}else f.team[id]=t;
+    if(f.keeperA&&f.team[f.keeperA]!=='A')f.keeperA='';if(f.keeperB&&f.team[f.keeperB]!=='B')f.keeperB='';}
+  else if(a==='inc'||a==='dec'){const k=b.dataset.k,s=f.stats[id]||(f.stats[id]={});const max={y:2,r:1}[k]??99;s[k]=Math.min(max,Math.max(0,(s[k]||0)+(a==='inc'?1:-1)));if(!s[k])delete s[k];if(!Object.keys(s).length)delete f.stats[id];}
+  else if(a==='repeat'){const last=sortedMatches()[0];if(last){f.team={};(last.teamA||[]).forEach(x=>f.team[x]='A');(last.teamB||[]).forEach(x=>f.team[x]='B');f.stats={};f.keeperA=last.keeperA||'';f.keeperB=last.keeperB||''}}
+  else return;
+  renderForm();
+});
+async function saveForm(){
+  const f=form;
+  const teamA=Object.keys(f.team).filter(id=>f.team[id]==='A'),teamB=Object.keys(f.team).filter(id=>f.team[id]==='B');
+  if(!f.date)return toast('Informe a data.');
+  if(!teamA.length||!teamB.length)return toast('Coloque jogadores nos dois times.');
+  const stats={};for(const id of [...teamA,...teamB])if(f.stats[id])stats[id]=f.stats[id];
+  const body={date:f.date,scoreA:f.scoreA,scoreB:f.scoreB,teamA,teamB,keeperA:f.keeperA||null,keeperB:f.keeperB||null,stats,createdAt:f.createdAt||Date.now(),updatedAt:Date.now()};
+  const btn=$('#mdf [data-mb="1"]');if(btn){btn.disabled=true;btn.textContent='Salvando…'}
+  const ok=await w(()=>f.id?db.doc('matches/'+f.id).set(body):db.collection('matches').add(body),'Partida salva ✅');
+  if(ok)closeModal();else if(btn){btn.disabled=false;btn.textContent='💾 Salvar partida'}
+}
+
+/* ---------- main events ---------- */
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;tab=b.dataset.t;render();window.scrollTo(0,0)});
+$('#chips').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(!b)return;period=b.dataset.p;render()});
+$('#app').addEventListener('submit',async e=>{
+  if(e.target.id!=='addP')return;e.preventDefault();
+  const inp=$('#newName'),name=inp.value.trim().replace(/\s+/g,' ');if(!name)return;
+  if(players.some(p=>p.name.toLowerCase()===name.toLowerCase()))return toast('Já existe um jogador com esse nome.');
+  inp.value='';await w(()=>db.collection('players').add({name,active:true,createdAt:Date.now()}),name+' adicionado');
+});
+$('#app').addEventListener('click',async e=>{
+  const g=e.target.closest('[data-gm]');if(g){golsMode=g.dataset.gm;render();return}
+  const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,id=b.dataset.id;
+  if(a==='copy')doCopy(b.dataset.k);
+  else if(a==='export')exportBackup();
+  else if(a==='newMatch')openForm(null);
+  else if(a==='editMatch'){const m=matches.find(x=>x.id===id);if(m)openForm(m)}
+  else if(a==='delMatch'){const m=matches.find(x=>x.id===id);if(m&&await confirmBox(`Excluir a partida de ${fmtDate(m.date)} (A ${m.scoreA} x ${m.scoreB} B)?`,'Excluir'))w(()=>db.doc('matches/'+id).delete(),'Partida excluída')}
+  else if(a==='togP'){const p=players.find(x=>x.id===id);if(p)w(()=>db.doc('players/'+id).update({active:p.active===false}))}
+  else if(a==='editP'){const p=players.find(x=>x.id===id);if(!p)return;
+    openModal('Editar jogador',`<div class="lbl">Nome</div><input id="eName" value="${esc(p.name)}" maxlength="40">`,[{l:'Cancelar',sec:1},{l:'Salvar',f:async()=>{const n=$('#eName').value.trim().replace(/\s+/g,' ');if(!n)return;if(players.some(x=>x.id!==id&&x.name.toLowerCase()===n.toLowerCase()))return toast('Nome já usado.');if(await w(()=>db.doc('players/'+id).update({name:n}),'Nome atualizado'))closeModal()}}]);}
+});
+
+/* ---------- armazenamento local ---------- */
+const KEY='pelada-quarta-arena-feitoza-v1';
+const SEED=["Neguinho", "Antônio Freitas", "Lairton", "Carlinhos Araújo", "Júnior Pitombeira", "Boninho", "Júnior", "Netinho", "Cimar", "Luciano", "Paulinho", "Cereso", "Pastor Claudiano", "Diego", "Jefferson", "Nerinho", "Alan", "Joaquineto", "Raul", "Florentino", "Beethoven", "Toinho", "Orlando Vida", "Alexandre", "Wetinho", "Whoshigton", "Gil", "João Paulo", "Ricardo"];
+const newId=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+function loadStore(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.players&&s.matches)return s}catch(e){}
+  const s={players:{},matches:{},meta:{}};SEED.forEach((n,i)=>s.players[newId()+i]={name:n,active:true,createdAt:Date.now()+i});return s}
+let store=loadStore();
+const listeners={players:[],matches:[]};
+const snap=col=>({docs:Object.entries(store[col]).map(([id,d])=>({id,data:()=>d}))});
+function persist(){localStorage.setItem(KEY,JSON.stringify(store))}
+function emit(col){listeners[col].forEach(f=>f(snap(col)))}
+function emitAll(){emit('players');emit('matches')}
+db={
+  collection:col=>({add:async d=>{store[col][newId()]=d;persist();emit(col)},onSnapshot:f=>{listeners[col].push(f);f(snap(col));return()=>{}}}),
+  doc:path=>{const [col,id]=path.split('/');return{
+    set:async d=>{store[col][id]=d;persist();emit(col)},
+    update:async d=>{store[col][id]={...store[col][id],...d};persist();emit(col)},
+    delete:async()=>{delete store[col][id];persist();emit(col)}}}
+};
+isOwner=true;
+try{persist()}catch(e){status='Não foi possível salvar neste navegador. Abra pelo Chrome normal (não anônimo).'}
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+db.collection('players').onSnapshot(s=>{players=s.docs.map(d=>({id:d.id,...d.data()}));loaded.p=true;render()});
+db.collection('matches').onSnapshot(s=>{matches=s.docs.map(d=>({id:d.id,...d.data()}));loaded.m=true;render();if(form)renderForm()});
+
+/* ---------- backup ---------- */
+function exportBackup(){
+  store.meta=store.meta||{};store.meta.lastBackup=Date.now();persist();
+  const blob=new Blob([JSON.stringify({app:'pelada-quarta',version:1,exportedAt:new Date().toISOString(),players:store.players,matches:store.matches},null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='backup-pelada-quarta-'+today()+'.json';document.body.appendChild(a);a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1500);toast('Backup salvo em Downloads 💾');render();
+}
+async function importBackup(file){
+  try{const d=JSON.parse(await file.text());
+    if(!d||typeof d.players!=='object'||typeof d.matches!=='object')throw 0;
+    const np=Object.keys(d.players).length,nm=Object.keys(d.matches).length;
+    if(!await confirmBox(`Restaurar o backup com ${np} jogadores e ${nm} partidas? Os dados atuais deste celular serão substituídos.`,'Restaurar'))return;
+    store={players:d.players,matches:d.matches,meta:store.meta||{}};persist();emitAll();toast('Backup restaurado ✅');
+  }catch(e){toast('Arquivo de backup inválido.')}
+}
+$('#app').addEventListener('change',e=>{if(e.target.id==='impFile'&&e.target.files[0]){importBackup(e.target.files[0]);e.target.value=''}});
+if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
